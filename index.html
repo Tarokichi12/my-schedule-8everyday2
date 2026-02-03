@@ -46,7 +46,7 @@
         .done-wrapper { display: flex; align-items: center; justify-content: center; gap: 3px; margin-top: 5px; font-size: 10px; color: #ff6f91; font-weight: bold; position: absolute; bottom: 5px; width: 100%; }
         .check-circle { width: 18px; height: 18px; border: 2px solid #ff6f91; border-radius: 50%; background: white; }
         .check-circle.done { background-color: #ff6f91; color: white; line-height: 18px; }
-        .check-circle.done::after { content: '''; }
+        .check-circle.done::after { content: '✓'; }
 
         .is-grayout { background-color: var(--gray-out) !important; opacity: 0.5; pointer-events: none; }
         .cell-school { background-color: #e3f2fd; } .cell-juku { background-color: #fff3e0; }
@@ -80,26 +80,26 @@
 <body>
 
 <div id="main-wrapper">
-    <div id="message">すごい！！頑張ったね=ﾘﾞ</div>
+    <div id="message">すごい！！頑張ったね😍</div>
 
     <div class="top-nav">
-        <h1>=ﾘ巖毎日のタスクスケジュール=ﾘ巖</h1>
+        <h1>💛毎日のタスクスケジュール💛</h1>
         <div class="date-display">
-            <button onclick="moveWeek(-1)">ﾀ%</button>
+            <button onclick="moveWeek(-1)">◀</button>
             <span id="dateRangeDisplay">日付</span>
-            <button onclick="moveWeek(1)">ｶ%</button>
+            <button onclick="moveWeek(1)">▶</button>
         </div>
     </div>
 
     <div class="palette" id="palette">
-        <button class="palette-btn" data-task="school"><ﾘ鶴学校宿題</button>
-        <button class="palette-btn" data-task="dance">=ﾘ・ダンス</button>
-        <button class="palette-btn" data-task="juku_国語" style="border-color:orange;color:orange;">=ﾘﾖﾜ塾(国)</button>
-        <button class="palette-btn" data-task="juku_算数" style="border-color:orange;color:orange;">=ﾘﾖﾜ塾(算)</button>
-        <button class="palette-btn" data-task="juku_理科" style="border-color:orange;color:orange;">=ﾘﾖﾜ塾(理)</button>
-        <button class="palette-btn" data-task="juku_社会" style="border-color:orange;color:orange;">=ﾘﾖﾜ塾(社)</button>
-        <button class="palette-btn" data-task="free">'︀じゆう</button>
-        <button class="palette-btn" data-task="clear">>ﾘけしごむ</button>
+        <button class="palette-btn" data-task="school">🎒学校宿題</button>
+        <button class="palette-btn" data-task="dance">💃ダンス</button>
+        <button class="palette-btn" data-task="juku_国語" style="border-color:orange;color:orange;">📖塾(国)</button>
+        <button class="palette-btn" data-task="juku_算数" style="border-color:orange;color:orange;">📖塾(算)</button>
+        <button class="palette-btn" data-task="juku_理科" style="border-color:orange;color:orange;">📖塾(理)</button>
+        <button class="palette-btn" data-task="juku_社会" style="border-color:orange;color:orange;">📖塾(社)</button>
+        <button class="palette-btn" data-task="free">✏️じゆう</button>
+        <button class="palette-btn" data-task="clear">🧹けしごむ</button>
     </div>
 
     <div class="scroll-container" id="mainScroll">
@@ -125,10 +125,10 @@
         <div id="ai-comment" style="margin-top:20px; font-weight:bold; color:#ff6f91; min-height: 1.5em;"></div>
     </div>
 
-    <div id="mascot-container"><span id="mascot">>ﾘ</span></div>
+    <div id="mascot-container"><span id="mascot">🧸</span></div>
 
     <div class="sync-box">
-        <b>=ﾘ データ同期</b><br>
+        <b>📱 データ同期</b><br>
         <button class="btn-sm" onclick="exportData()">データをコピー</button>
         <button class="btn-sm" onclick="importData()">データを受け取る</button>
     </div>
@@ -136,7 +136,7 @@
 
 <script>
     // ★★★ ここで「あいことば」を設定してね ★★★
-    const SECRET_KEYWORD = "bear123"; 
+    const SECRET_KEYWORD = "くまさん"; 
 
     const days = ["月", "火", "水", "木", "金", "土", "日"];
     let currentMonday = getMonday(new Date());
@@ -144,13 +144,13 @@
     let currentTab = 'week';
 
     function checkAuth() {
-        const input = prompt(">ﾘ あいことばを いれてね！");
+        const input = prompt("🧸 あいことばを いれてね！");
         if (input === SECRET_KEYWORD) {
             document.getElementById('main-wrapper').style.display = 'block';
             init();
         } else {
             alert("あいことばが ちがうよ。ページをひらきなおしてね！");
-            document.body.innerHTML = "<div style='margin-top:50px;'><h1>=ﾘﾝ 読み込めませんでした</h1><p>正しい あいことばをいれてね。</p></div>";
+            document.body.innerHTML = "<div style='margin-top:50px;'><h1>🔒 読み込めませんでした</h1><p>正しい あいことばをいれてね。</p></div>";
         }
     }
 
@@ -166,7 +166,7 @@
                     <select class="school-time" onchange="updateView()" style="font-size:9px;">
                         <option value="15:30">6時間</option><option value="14:30">5時間</option><option value="13:30">午前</option>
                     </select>
-                    <label style="color:#d32f2f;"><input type="checkbox" class="busy-check" onchange="updateView()">1日=ﾘｫﾜ</label>
+                    <label style="color:#d32f2f;"><input type="checkbox" class="busy-check" onchange="updateView()">1日💫</label>
                 </div>`;
             header.appendChild(th);
         });
@@ -212,7 +212,7 @@
             let type = selectedTask.split('_')[0];
             let sub = selectedTask.split('_')[1] || "";
             td.className = (isThisDay(td.dataset.day)?'today-highlight ':'') + 'cell-' + type;
-            content.innerHTML = type==='school'?"<ﾘ鶴宿題":type==='juku'?"=ﾘﾖﾜ塾("+sub+")":type==='dance'?"=ﾘ・ダンス":"'︀自由";
+            content.innerHTML = type==='school'?"🎒宿題":type==='juku'?"📖塾("+sub+")":type==='dance'?"💃ダンス":"✏️自由";
         }
         saveData(); updateStats();
     }
@@ -274,10 +274,10 @@
             }
             let html = '<div class="year-report-container">';
             for(let m=1; m<=12; m++) {
-                html += `<div class="month-card"><div class="month-title">${m}月</div><div class="stat-row"><span><ﾘ鶴宿題</span><span>${yearlyData[m]["学校"]/2}h</span></div><div class="stat-row"><span>=ﾘﾖﾜ塾</span><span>${yearlyData[m]["塾"]/2}h</span></div><div class="stat-row"><span>=ﾘ・ダンス</span><span>${yearlyData[m]["ダンス"]/2}h</span></div><div class="stat-row"><span>'︀自由</span><span>${yearlyData[m]["自由"]/2}h</span></div></div>`;
+                html += `<div class="month-card"><div class="month-title">${m}月</div><div class="stat-row"><span>🎒宿題</span><span>${yearlyData[m]["学校"]/2}h</span></div><div class="stat-row"><span>📖塾</span><span>${yearlyData[m]["塾"]/2}h</span></div><div class="stat-row"><span>💃ダンス</span><span>${yearlyData[m]["ダンス"]/2}h</span></div><div class="stat-row"><span>✏️自由</span><span>${yearlyData[m]["自由"]/2}h</span></div></div>`;
             }
             container.innerHTML = html + '</div>';
-            aiComment.textContent = selectedYear + "年の成長の記録だよ！('";
+            aiComment.textContent = selectedYear + "年の成長の記録だよ！✨";
         }
     }
     function getMonday(d) { d = new Date(d); d.setHours(0,0,0,0); let day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6:1); return new Date(d.setDate(diff)); }
