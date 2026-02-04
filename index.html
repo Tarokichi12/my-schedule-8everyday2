@@ -2,88 +2,133 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>成長記録タスクスケジュール</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>キラキラ成長記録✨</title>
 
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2362/2362789.png">
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2362/2362789.png">
+
     <style>
         :root {
-            --bg-color: #fffaf5;
-            --main-pink: #ff9a9e;
-            --main-yellow: #fff9aa;
-            --gray-out: #d0d0d0;
-            --juku-color: #FF9800;
+            --main-pink: #ffb7c5; 
+            --sub-pink: #ffe4e8;
+            --accent-pink: #ff85a1;
+            --bg-color: #fffafb;
+            --gray-out: #f0f0f0;
+            --juku-color: #ff9f43;
+            --eng-color: #a29bfe;
+            --book-color: #55efc4;
         }
-        /* 最初は中身を隠しておく */
+
         #main-wrapper { display: none; }
 
-        body { font-family: 'Hiragino Sans', sans-serif; background-color: var(--bg-color); margin: 0; text-align: center; color: #333; padding-bottom: 100px; }
+        body { 
+            font-family: 'Hiragino Maru Gothic ProN', 'Hiragino Sans', sans-serif; 
+            background-color: var(--bg-color); 
+            margin: 0; 
+            text-align: center; 
+            color: #5d5d5d;
+            overflow-x: hidden;
+        }
         
-        .top-nav { background: white; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        h1 { color: #ff6f91; font-size: 1.2rem; margin: 5px 0; }
-        .date-display { font-weight: bold; font-size: 0.95rem; color: #ff6f91; margin: 5px 0; display: flex; align-items: center; justify-content: center; gap: 10px;}
-
-        #message {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(255, 111, 145, 0.95); color: white; padding: 20px; border-radius: 50px;
-            font-weight: bold; font-size: 1.5rem; z-index: 2000; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* ヘッダーのスリム化 */
+        .top-nav { 
+            background: white; 
+            padding: 5px 10px; 
+            box-shadow: 0 2px 10px rgba(255, 183, 197, 0.3); 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+        }
+        h1 { color: var(--accent-pink); font-size: 0.95rem; margin: 2px 0; }
+        .date-display { 
+            font-weight: bold; font-size: 0.8rem; color: var(--accent-pink); 
+            margin: 2px 0; display: flex; align-items: center; justify-content: center; gap: 6px;
+        }
+        .date-display button {
+            background: var(--sub-pink); border: none; border-radius: 50%; width: 22px; height: 22px; color: var(--accent-pink); font-weight: bold;
         }
 
-        .palette { background: #fff; padding: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; border-bottom: 2px solid #ffd1dc; }
-        .palette-btn { padding: 8px 12px; border-radius: 15px; border: 2px solid #eee; background: white; cursor: pointer; font-size: 12px; font-weight: bold; white-space: nowrap; }
-        .palette-btn.active { border-color: #ff6f91; background: #ffeef2; transform: scale(1.05); }
+        /* パレット：塾4教科を復活 */
+        .palette { 
+            background: #fff; padding: 6px; display: flex; flex-wrap: wrap; 
+            justify-content: center; gap: 5px; border-bottom: 2px dotted var(--main-pink); 
+        }
+        .palette-btn { 
+            padding: 5px 8px; border-radius: 15px; border: 1.5px solid var(--sub-pink); 
+            background: white; cursor: pointer; font-size: 10px; font-weight: bold; color: #777;
+            box-shadow: 0 2px 0 var(--sub-pink);
+        }
+        .palette-btn.active { 
+            border-color: var(--accent-pink); background: var(--sub-pink); 
+            color: var(--accent-pink); transform: translateY(1px); box-shadow: none;
+        }
 
-        .scroll-container { overflow: auto; height: 50vh; background: white; -webkit-overflow-scrolling: touch; }
-        table { border-collapse: collapse; min-width: 1000px; width: 100%; table-layout: fixed; }
-        thead th { position: sticky; top: 0; z-index: 400; background-color: var(--main-pink); color: white; padding: 10px 2px; border: 1px solid #ffe0e6; font-size: 0.8rem; }
-        .time-col { background: #fff0f3; font-weight: bold; width: 50px; position: sticky; left: 0; z-index: 300; vertical-align: middle; border: 1px solid #ffe0e6; }
+        /* テーブル */
+        .scroll-container { overflow: auto; height: 55vh; background: white; -webkit-overflow-scrolling: touch; }
+        table { border-collapse: collapse; min-width: 900px; width: 100%; table-layout: fixed; }
+        thead th { 
+            position: sticky; top: 0; z-index: 400; background-color: var(--main-pink); 
+            color: white; padding: 4px 2px; border: 1px solid white; font-size: 0.7rem; 
+        }
+        .time-col { 
+            background: var(--sub-pink); font-weight: bold; width: 40px; 
+            position: sticky; left: 0; z-index: 300; vertical-align: middle; 
+            border: 1px solid white; font-size: 0.65rem; color: var(--accent-pink);
+        }
         
-        td { height: 80px; border: 1px solid #ffe0e6; vertical-align: top; cursor: pointer; position: relative; }
-        .content { font-size: 11px; font-weight: bold; padding: 4px 2px; word-break: break-all; line-height: 1.2; }
-        .today-highlight { background-color: #fff9c4 !important; color: #d81b60 !important; border: 2px solid #ff6f91 !important; }
+        td { height: 65px; border: 1px solid var(--sub-pink); vertical-align: top; cursor: pointer; position: relative; }
+        .content { font-size: 10px; font-weight: bold; padding: 2px 1px; word-break: break-all; line-height: 1.1; }
+        .today-highlight { background-color: #fffdeb !important; }
 
-        .done-wrapper { display: flex; align-items: center; justify-content: center; gap: 3px; margin-top: 5px; font-size: 10px; color: #ff6f91; font-weight: bold; position: absolute; bottom: 5px; width: 100%; }
-        .check-circle { width: 18px; height: 18px; border: 2px solid #ff6f91; border-radius: 50%; background: white; }
-        .check-circle.done { background-color: #ff6f91; color: white; line-height: 18px; }
+        .done-wrapper { 
+            display: flex; align-items: center; justify-content: center; 
+            position: absolute; bottom: 2px; width: 100%; font-size: 8px; color: var(--accent-pink);
+        }
+        .check-circle { width: 14px; height: 14px; border: 1.5px solid var(--accent-pink); border-radius: 50%; background: white; }
+        .check-circle.done { background-color: var(--accent-pink); color: white; line-height: 14px; font-size: 9px; }
         .check-circle.done::after { content: '✓'; }
 
-        .is-grayout { background-color: var(--gray-out) !important; opacity: 0.5; pointer-events: none; }
-        .cell-school { background-color: #e3f2fd; } .cell-juku { background-color: #fff3e0; }
-        .cell-dance { background-color: #f3e5f5; } .cell-free { background-color: #f1f8e9; }
+        /* セルカラー */
+        .cell-school { background-color: #e3f2fd; } 
+        .cell-juku { background-color: #fff3e0; }
+        .cell-dance { background-color: #f3e5f5; } 
+        .cell-eng { background-color: #eeecff; } 
+        .cell-book { background-color: #e8fff8; } 
+        .cell-free { background-color: #f1f8e9; }
+        .is-grayout { background-color: #eee !important; opacity: 0.4; pointer-events: none; }
 
-        .stats-section { background: white; margin: 15px; padding: 15px; border-radius: 20px; border: 3px solid #ffd1dc; }
-        .stats-header { display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tab-menu { display: flex; gap: 10px; }
-        .tab-btn { padding: 5px 15px; border-radius: 10px; border: 1px solid #ccc; background: #eee; cursor: pointer; font-weight: bold; }
-        .tab-btn.active { background: #ff6f91; color: white; border-color: #ff6f91; }
+        /* メッセージ */
+        #message {
+            position: fixed; top: 15%; left: 50%; transform: translateX(-50%);
+            background: var(--accent-pink); color: white; padding: 8px 16px; 
+            border-radius: 20px; font-weight: bold; font-size: 0.9rem; z-index: 2000; 
+            display: none; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .stats-section { background: white; margin: 8px; padding: 8px; border-radius: 20px; border: 2px solid var(--main-pink); }
+        .tab-btn { padding: 4px 10px; border-radius: 12px; border: 1px solid var(--main-pink); background: white; color: var(--accent-pink); font-size: 10px; cursor: pointer; font-weight: bold;}
+        .tab-btn.active { background: var(--main-pink); color: white; }
         
-        .year-report-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
-        .month-card { background: #fffafb; border: 1px solid #ffd1dc; border-radius: 15px; padding: 10px; text-align: left; }
-        .month-title { font-weight: bold; color: #ff6f91; border-bottom: 1px dashed #ffd1dc; margin-bottom: 5px; text-align: center; font-size: 14px; }
-        .stat-row { font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 2px; }
+        .year-report-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+        .month-card { background: #fffafb; border: 1px solid var(--sub-pink); border-radius: 10px; padding: 5px; }
+        .month-title { color: var(--accent-pink); font-size: 10px; font-weight: bold; }
+        .stat-row { font-size: 8px; margin-bottom: 1px; }
 
-        .graph-area { display: flex; align-items: flex-end; justify-content: space-around; height: 160px; margin-top: 30px; padding-bottom: 25px; border-bottom: 2px solid #ff9a9e; }
-        .bar { width: 30px; background: linear-gradient(to top, #ff9a9e, #fecfef); border-radius: 8px 8px 0 0; position: relative; min-height: 2px; }
-        .bar-label { position: absolute; top: -20px; width: 100%; font-size: 9px; font-weight: bold; color: #ff6f91; }
-        .bar-name { position: absolute; bottom: -22px; width: 100%; font-size: 8px; font-weight: bold; }
+        #mascot-container { position: fixed; bottom: 10px; right: 10px; z-index: 900; }
+        #mascot { font-size: 50px; }
 
-        #mascot-container { position: fixed; bottom: 20px; right: 20px; z-index: 900; }
-        #mascot { font-size: 80px; cursor: pointer; animation: floatY 3s ease-in-out infinite; transition: transform 0.2s; display: block; }
-        @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        #mascot:active { transform: scale(1.2) translateY(-20px) !important; }
-
-        .sync-box { background: #f0f0f0; margin: 15px; padding: 10px; border-radius: 10px; font-size: 11px; }
-        .year-select { padding: 5px; border-radius: 10px; border: 2px solid #ff6f91; font-weight: bold; color: #ff6f91; outline: none; }
+        .sync-box { background: var(--sub-pink); margin: 8px; padding: 6px; border-radius: 10px; font-size: 9px; color: var(--accent-pink); }
+        .btn-sm { background: white; border: 1px solid var(--accent-pink); color: var(--accent-pink); border-radius: 8px; padding: 2px 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="main-wrapper">
-    <div id="message">すごい！！頑張ったね😍</div>
+    <div id="message">やったね！えらいっ🍓</div>
 
     <div class="top-nav">
-        <h1>💛毎日のタスクスケジュール💛</h1>
+        <h1>🎀 キラキラ成長スケジュール 🎀</h1>
         <div class="date-display">
             <button onclick="moveWeek(-1)">◀</button>
             <span id="dateRangeDisplay">日付</span>
@@ -92,14 +137,16 @@
     </div>
 
     <div class="palette" id="palette">
-        <button class="palette-btn" data-task="school">🎒学校宿題</button>
+        <button class="palette-btn" data-task="school">🎒学校</button>
+        <button class="palette-btn" data-task="juku_国語" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(国)</button>
+        <button class="palette-btn" data-task="juku_算数" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(算)</button>
+        <button class="palette-btn" data-task="juku_理科" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(理)</button>
+        <button class="palette-btn" data-task="juku_社会" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(社)</button>
+        <button class="palette-btn" data-task="eng" style="border-color:var(--eng-color); color:var(--eng-color);">🔤英語</button>
+        <button class="palette-btn" data-task="book" style="border-color:var(--book-color); color:var(--book-color);">📚読書</button>
         <button class="palette-btn" data-task="dance">💃ダンス</button>
-        <button class="palette-btn" data-task="juku_国語" style="border-color:orange;color:orange;">📖塾(国)</button>
-        <button class="palette-btn" data-task="juku_算数" style="border-color:orange;color:orange;">📖塾(算)</button>
-        <button class="palette-btn" data-task="juku_理科" style="border-color:orange;color:orange;">📖塾(理)</button>
-        <button class="palette-btn" data-task="juku_社会" style="border-color:orange;color:orange;">📖塾(社)</button>
         <button class="palette-btn" data-task="free">✏️じゆう</button>
-        <button class="palette-btn" data-task="clear">🧹けしごむ</button>
+        <button class="palette-btn" data-task="clear">🧹消しゴム</button>
     </div>
 
     <div class="scroll-container" id="mainScroll">
@@ -110,32 +157,29 @@
     </div>
 
     <div class="stats-section">
-        <div class="stats-header">
-            <select id="yearSelect" class="year-select" onchange="updateStats()">
-                <option value="2025">2025年</option>
-                <option value="2026" selected>2026年</option>
-                <option value="2027">2027年</option>
+        <div class="stats-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <select id="yearSelect" class="year-select" onchange="updateStats()" style="border:1px solid var(--main-pink); border-radius:8px; font-size:10px; color:var(--accent-pink);">
+                <option value="2025">2025年</option><option value="2026" selected>2026年</option><option value="2027">2027年</option>
             </select>
-            <div class="tab-menu">
+            <div class="tab-menu" style="display:flex; gap:4px;">
                 <button class="tab-btn active" onclick="changeTab('week', this)">今週</button>
-                <button class="tab-btn" onclick="yearReportMode()">今年(項目別)</button>
+                <button class="tab-btn" onclick="yearReportMode()">今年</button>
             </div>
         </div>
         <div id="statsContent"><div class="graph-area" id="graphArea"></div></div>
-        <div id="ai-comment" style="margin-top:20px; font-weight:bold; color:#ff6f91; min-height: 1.5em;"></div>
+        <div id="ai-comment" style="font-size:10px; margin-top:5px; font-weight:bold; color:var(--accent-pink);"></div>
     </div>
 
     <div id="mascot-container"><span id="mascot">🧸</span></div>
 
     <div class="sync-box">
-        <b>📱 データ同期</b><br>
         <button class="btn-sm" onclick="exportData()">データをコピー</button>
-        <button class="btn-sm" onclick="importData()">データを受け取る</button>
+        <button class="btn-sm" onclick="importData()">受け取る</button>
     </div>
 </div>
 
 <script>
-    // ★★★ ここで「あいことば」を設定してね ★★★
+    // ★ あいことばの設定
     const SECRET_KEYWORD = "くまさん"; 
 
     const days = ["月", "火", "水", "木", "金", "土", "日"];
@@ -149,8 +193,8 @@
             document.getElementById('main-wrapper').style.display = 'block';
             init();
         } else {
-            alert("あいことばが ちがうよ。ページをひらきなおしてね！");
-            document.body.innerHTML = "<div style='margin-top:50px;'><h1>🔒 読み込めませんでした</h1><p>正しい あいことばをいれてね。</p></div>";
+            alert("ちがうよ〜！");
+            location.reload();
         }
     }
 
@@ -160,13 +204,16 @@
             const th = document.createElement('th');
             th.id = `col-header-${i}`;
             if(isThisDay(i)) th.classList.add('today-highlight');
-            th.innerHTML = `${day}曜日<br>
-                <div style="background:white; color:black; font-size:9px; border-radius:5px; margin-top:5px; padding:4px;">
-                    <label><input type="checkbox" class="school-check" ${i<5?'checked':''} onchange="updateView()">学校</label>
-                    <select class="school-time" onchange="updateView()" style="font-size:9px;">
-                        <option value="15:30">6時間</option><option value="14:30">5時間</option><option value="13:30">午前</option>
+            th.innerHTML = `${day}<br>
+                <div style="background:white; color:black; font-size:8px; border-radius:5px; margin-top:3px; padding:2px; display:flex; flex-direction:column; gap:2px;">
+                    <label style="display:flex; align-items:center; gap:1px;"><input type="checkbox" class="school-check" ${i<5?'checked':''} onchange="updateView()">学校</label>
+                    <select class="school-time" onchange="updateView()" style="font-size:8px; border:1px solid #ddd; border-radius:3px;">
+                        <option value="15:30">6時間</option>
+                        <option value="14:30">5時間</option>
+                        <option value="13:30">午前</option>
+                        <option value="12:30">給無</option>
                     </select>
-                    <label style="color:#d32f2f;"><input type="checkbox" class="busy-check" onchange="updateView()">1日💫</label>
+                    <label style="color:#d32f2f; display:flex; align-items:center; gap:1px; border-top:1px dashed #eee; padding-top:1px;"><input type="checkbox" class="busy-check" onchange="updateView()">1日予定あり💫</label>
                 </div>`;
             header.appendChild(th);
         });
@@ -177,7 +224,7 @@
                 const row = document.createElement('tr');
                 row.dataset.time = `${h}:${m}`;
                 row.innerHTML = `<td class="time-col">${h}:${m}</td>` + 
-                    Array(7).fill(0).map((_, i) => `<td data-day="${i}" onclick="applyTask(this, event)"><div class="content"></div><div class="done-wrapper"><div class="check-circle" onclick="toggleDone(event, this)"></div>完了</div></td>`).join('');
+                    Array(7).fill(0).map((_, i) => `<td data-day="${i}" onclick="applyTask(this, event)"><div class="content"></div><div class="done-wrapper"><div class="check-circle" onclick="toggleDone(event, this)"></div></div></td>`).join('');
                 document.getElementById('tableBody').appendChild(row);
             }
         }
@@ -191,12 +238,13 @@
         targetDate.setDate(targetDate.getDate() + dayIdx);
         return d.toDateString() === targetDate.toDateString();
     }
+
     function scrollToToday() {
-        const today = new Date();
-        const todayIdx = (today.getDay() + 6) % 7; 
+        const todayIdx = (new Date().getDay() + 6) % 7; 
         const targetHeader = document.getElementById(`col-header-${todayIdx}`);
-        if (targetHeader) document.getElementById('mainScroll').scrollTo({ left: targetHeader.offsetLeft - 60, behavior: 'smooth' });
+        if (targetHeader) document.getElementById('mainScroll').scrollTo({ left: targetHeader.offsetLeft - 40, behavior: 'smooth' });
     }
+
     document.querySelectorAll('.palette-btn').forEach(btn => {
         btn.onclick = () => {
             document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
@@ -204,57 +252,75 @@
             if(selectedTask) btn.classList.add('active');
         };
     });
-    function applyTask(td, event) {
+
+    async function applyTask(td, event) {
         if (!selectedTask || event.target.closest('.done-wrapper')) return;
         const content = td.querySelector('.content');
-        if (selectedTask === 'clear') { content.innerHTML = ''; td.className = isThisDay(td.dataset.day)?'today-highlight':''; }
-        else {
+        if (selectedTask === 'clear') { 
+            content.innerHTML = ''; 
+            td.className = isThisDay(td.dataset.day)?'today-highlight':''; 
+        } else {
             let type = selectedTask.split('_')[0];
             let sub = selectedTask.split('_')[1] || "";
+            let label = "";
+            if (type === 'free') {
+                await new Promise(r => setTimeout(r, 10));
+                const val = prompt("なにする？", "じゆう");
+                label = val ? "✏️" + val : "✏️じゆう";
+            } else if (type === 'juku') {
+                label = "📖塾(" + sub + ")";
+            } else {
+                const labels = {school:"🎒学校", eng:"🔤英語", book:"📚読書", dance:"💃ダンス"};
+                label = labels[type];
+            }
             td.className = (isThisDay(td.dataset.day)?'today-highlight ':'') + 'cell-' + type;
-            content.innerHTML = type==='school'?"🎒宿題":type==='juku'?"📖塾("+sub+")":type==='dance'?"💃ダンス":"✏️自由";
+            content.innerHTML = label;
         }
         saveData(); updateStats();
     }
+
     function toggleDone(e, el) {
         e.stopPropagation(); el.classList.toggle('done');
         if(el.classList.contains('done')) {
-            document.getElementById('message').style.display = 'block';
-            setTimeout(()=> document.getElementById('message').style.display='none', 1000);
+            const msg = document.getElementById('message');
+            msg.style.display = 'block';
+            setTimeout(()=> msg.style.display='none', 1000);
         }
         saveData(); updateStats();
     }
-    function yearReportMode() {
-        currentTab = 'year';
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-        updateStats();
-    }
+
+    function yearReportMode() { currentTab = 'year'; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-btn')[1].classList.add('active'); updateStats(); }
+
     function updateStats() {
         const container = document.getElementById('statsContent');
         const aiComment = document.getElementById('ai-comment');
         const selectedYear = document.getElementById('yearSelect').value;
         if (currentTab === 'week') {
-            container.innerHTML = '<div class="graph-area" id="graphArea"></div>';
+            container.innerHTML = '<div class="graph-area" id="graphArea" style="display:flex; align-items:flex-end; height:100px; border-bottom:1px solid var(--sub-pink); justify-content:space-around; margin-top:15px;"></div>';
             const area = document.getElementById('graphArea');
-            let stats = { "学校":0, "塾":0, "ダンス":0, "自由":0 };
+            let stats = { "学校":0, "塾":0, "英語":0, "読書":0, "ダンス":0, "自由":0 };
             const data = JSON.parse(localStorage.getItem("week_" + currentMonday.toISOString().split('T')[0]) || "[]");
             data.forEach(item => {
                 if(item.done) {
                     if(item.class.includes('school')) stats["学校"]++;
                     else if(item.class.includes('juku')) stats["塾"]++;
+                    else if(item.class.includes('eng')) stats["英語"]++;
+                    else if(item.class.includes('book')) stats["読書"]++;
                     else if(item.class.includes('dance')) stats["ダンス"]++;
                     else if(item.class.includes('free')) stats["自由"]++;
                 }
             });
             const max = Math.max(...Object.values(stats), 1);
             Object.entries(stats).forEach(([name, count]) => {
-                area.innerHTML += `<div class="bar" style="height:${(count/max)*120}px"><div class="bar-label">${count/2}h</div><div class="bar-name">${name}</div></div>`;
+                area.innerHTML += `<div style="height:${(count/max)*80}px; width:18px; background:var(--main-pink); border-radius:4px 4px 0 0; position:relative;">
+                    <div style="position:absolute; top:-12px; width:100%; font-size:7px;">${count/2}h</div>
+                    <div style="position:absolute; bottom:-12px; width:100%; font-size:7px; white-space:nowrap;">${name}</div>
+                </div>`;
             });
-            aiComment.textContent = "今週の頑張りが見えるね！";
+            aiComment.textContent = "今週もよくがんばってるね！🍓";
         } else {
             let yearlyData = {};
-            for(let m=1; m<=12; m++) yearlyData[m] = { "学校":0, "塾":0, "ダンス":0, "自由":0 };
+            for(let m=1; m<=12; m++) yearlyData[m] = { "学":0, "塾":0, "英":0, "読":0, "ダ":0 };
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (!key.startsWith('week_')) continue;
@@ -264,28 +330,33 @@
                     data.forEach(item => {
                         if(item.done) {
                             let m = d.getMonth() + 1;
-                            if(item.class.includes('school')) yearlyData[m]["学校"]++;
+                            if(item.class.includes('school')) yearlyData[m]["学"]++;
                             else if(item.class.includes('juku')) yearlyData[m]["塾"]++;
-                            else if(item.class.includes('dance')) yearlyData[m]["ダンス"]++;
-                            else if(item.class.includes('free')) yearlyData[m]["自由"]++;
+                            else if(item.class.includes('eng')) yearlyData[m]["英"]++;
+                            else if(item.class.includes('book')) yearlyData[m]["読"]++;
+                            else if(item.class.includes('dance')) yearlyData[m]["ダ"]++;
                         }
                     });
                 }
             }
             let html = '<div class="year-report-container">';
             for(let m=1; m<=12; m++) {
-                html += `<div class="month-card"><div class="month-title">${m}月</div><div class="stat-row"><span>🎒宿題</span><span>${yearlyData[m]["学校"]/2}h</span></div><div class="stat-row"><span>📖塾</span><span>${yearlyData[m]["塾"]/2}h</span></div><div class="stat-row"><span>💃ダンス</span><span>${yearlyData[m]["ダンス"]/2}h</span></div><div class="stat-row"><span>✏️自由</span><span>${yearlyData[m]["自由"]/2}h</span></div></div>`;
+                html += `<div class="month-card"><div class="month-title">${m}月</div>
+                    <div class="stat-row">🎒${yearlyData[m]["学"]/2}h</div><div class="stat-row">📖${yearlyData[m]["塾"]/2}h</div>
+                    <div class="stat-row">🔤${yearlyData[m]["英"]/2}h</div><div class="stat-row">📚${yearlyData[m]["読"]/2}h</div>
+                </div>`;
             }
             container.innerHTML = html + '</div>';
-            aiComment.textContent = selectedYear + "年の成長の記録だよ！✨";
+            aiComment.textContent = selectedYear + "年のきろくだよ✨";
         }
     }
+
     function getMonday(d) { d = new Date(d); d.setHours(0,0,0,0); let day = d.getDay(), diff = d.getDate() - day + (day == 0 ? -6:1); return new Date(d.setDate(diff)); }
     function updateView() {
         const start = currentMonday;
         const end = new Date(currentMonday); end.setDate(start.getDate() + 6);
-        const format = (d) => `${d.getMonth() + 1}月${d.getDate()}日(${days[(d.getDay() + 6) % 7]})`;
-        document.getElementById('dateRangeDisplay').textContent = `${format(start)} ～ ${format(end)} (${start.getFullYear()}年)`;
+        const format = (d) => `${d.getMonth() + 1}/${d.getDate()}(${days[(d.getDay() + 6) % 7]})`;
+        document.getElementById('dateRangeDisplay').textContent = `${format(start)} 〜 ${format(end)}`;
         loadData(); refreshGrayOut(); updateStats();
     }
     function saveData() {
@@ -303,12 +374,14 @@
     }
     function moveWeek(n) { currentMonday.setDate(currentMonday.getDate() + n*7); updateView(); }
     function changeTab(t, btn) { currentTab = t; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); updateStats(); }
+    
     function refreshGrayOut() {
         const sChecks = document.querySelectorAll('.school-check'), bChecks = document.querySelectorAll('.busy-check'), sTimes = document.querySelectorAll('.school-time');
         document.querySelectorAll('#tableBody tr').forEach(row => {
             const time = parseInt(row.dataset.time.replace(':',''));
             for(let d=0; d<7; d++) {
-                const td = row.cells[d+1], limit = parseInt(sTimes[d].value.replace(':',''));
+                const td = row.cells[d+1];
+                const limit = parseInt(sTimes[d].value.replace(':',''));
                 if(bChecks[d].checked || (sChecks[d].checked && time >= 800 && time < limit)) td.classList.add('is-grayout'); else td.classList.remove('is-grayout');
             }
         });
@@ -316,7 +389,6 @@
     function exportData() { navigator.clipboard.writeText(JSON.stringify(localStorage)).then(() => alert("コピーしたよ！")); }
     function importData() { const json = prompt("データを貼り付けてね"); if(json) { Object.assign(localStorage, JSON.parse(json)); location.reload(); } }
 
-    // 最初にパスワードチェックを実行
     checkAuth();
 </script>
 </body>
