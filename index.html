@@ -60,7 +60,7 @@
             color: var(--accent-pink); transform: translateY(1px); box-shadow: none;
         }
 
-        .scroll-container { overflow: auto; height: 52vh; background: white; -webkit-overflow-scrolling: touch; }
+        .scroll-container { overflow: auto; height: 50vh; background: white; -webkit-overflow-scrolling: touch; }
         table { border-collapse: collapse; min-width: 900px; width: 100%; table-layout: fixed; }
         thead th { 
             position: sticky; top: 0; z-index: 400; background-color: var(--main-pink); 
@@ -84,13 +84,13 @@
         .check-circle.done { background-color: var(--accent-pink); color: white; line-height: 14px; font-size: 9px; }
         .check-circle.done::after { content: '✓'; }
 
+        .is-grayout { background-color: #eee !important; opacity: 0.4; pointer-events: none; }
         .cell-school { background-color: #e3f2fd; } 
         .cell-juku { background-color: #fff3e0; }
         .cell-dance { background-color: #f3e5f5; } 
         .cell-eng { background-color: #eeecff; } 
         .cell-book { background-color: #e8fff8; } 
         .cell-free { background-color: #f1f8e9; }
-        .is-grayout { background-color: #eee !important; opacity: 0.4; pointer-events: none; }
 
         #message {
             position: fixed; top: 15%; left: 50%; transform: translateX(-50%);
@@ -103,7 +103,6 @@
         .tab-btn { padding: 4px 12px; border-radius: 12px; border: 1px solid var(--main-pink); background: white; color: var(--accent-pink); font-size: 11px; cursor: pointer; font-weight: bold;}
         .tab-btn.active { background: var(--main-pink); color: white; }
         
-        /* 今年の集計：2列にして見やすく修正 */
         .year-report-container { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -116,22 +115,29 @@
             border-radius: 15px; 
             padding: 10px; 
             text-align: left;
-            box-shadow: 0 2px 5px rgba(255,183,197,0.2);
         }
         .month-title { color: var(--accent-pink); font-size: 13px; font-weight: bold; border-bottom: 1px dashed var(--main-pink); margin-bottom: 6px; text-align: center; }
-        .stat-row { 
-            font-size: 11px; 
-            display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 3px; 
-            color: #666;
-        }
+        .stat-row { font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 3px; color: #666; }
 
         #mascot-container { position: fixed; bottom: 10px; right: 10px; z-index: 900; }
         #mascot { font-size: 50px; }
 
         .sync-box { background: var(--sub-pink); margin: 8px; padding: 6px; border-radius: 10px; font-size: 9px; color: var(--accent-pink); }
         .btn-sm { background: white; border: 1px solid var(--accent-pink); color: var(--accent-pink); border-radius: 8px; padding: 2px 6px; cursor: pointer; }
+
+        /* 消去ボタンのスタイル */
+        .btn-clear-day {
+            margin-top: 2px;
+            padding: 2px 4px;
+            font-size: 8px;
+            background: #fff;
+            color: #ff85a1;
+            border: 1px solid #ff85a1;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .btn-clear-day:active { background: #ffe4e8; }
     </style>
 </head>
 <body>
@@ -215,7 +221,7 @@
             th.id = `col-header-${i}`;
             if(isThisDay(i)) th.classList.add('today-highlight');
             th.innerHTML = `${day}<br>
-                <div style="background:white; color:black; font-size:8px; border-radius:5px; margin-top:3px; padding:2px; display:flex; flex-direction:column; gap:2px;">
+                <div style="background:white; color:black; font-size:8px; border-radius:5px; margin-top:3px; padding:2px; display:flex; flex-direction:column; gap:1px;">
                     <label style="display:flex; align-items:center; gap:1px;"><input type="checkbox" class="school-check" ${i<5?'checked':''} onchange="updateView()">学校</label>
                     <select class="school-time" onchange="updateView()" style="font-size:8px; border:1px solid #ddd; border-radius:3px;">
                         <option value="15:30">6時間</option>
@@ -224,6 +230,7 @@
                         <option value="12:30">給無</option>
                     </select>
                     <label style="color:#d32f2f; display:flex; align-items:center; gap:1px; border-top:1px dashed #eee; padding-top:1px;"><input type="checkbox" class="busy-check" onchange="updateView()">1日予定あり💫</label>
+                    <button class="btn-clear-day" onclick="clearDay(${i})">全部消す🧹</button>
                 </div>`;
             header.appendChild(th);
         });
@@ -240,6 +247,23 @@
         }
         updateView();
         setTimeout(scrollToToday, 500);
+    }
+
+    // 曜日ごとの予定を一括消去する関数
+    function clearDay(dayIdx) {
+        if (!confirm(days[dayIdx] + "曜日の予定を全部消してもいいかな？")) return;
+        
+        const cells = document.querySelectorAll(`#tableBody td[data-day="${dayIdx}"]`);
+        cells.forEach(td => {
+            td.querySelector('.content').innerHTML = '';
+            // 今日のハイライトは残しつつ、タスク色だけ消す
+            td.className = isThisDay(dayIdx) ? 'today-highlight' : '';
+            // 完了チェックも外す
+            const check = td.querySelector('.check-circle');
+            if (check) check.classList.remove('done');
+        });
+        saveData();
+        updateStats();
     }
 
     function isThisDay(dayIdx) {
@@ -329,7 +353,6 @@
             });
             aiComment.textContent = "今週もよくがんばってるね！🍓";
         } else {
-            // 集計対象に「ダンス」「自由」を追加
             let yearlyData = {};
             for(let m=1; m<=12; m++) yearlyData[m] = { "学":0, "塾":0, "英":0, "読":0, "ダ":0, "自":0 };
             
