@@ -31,14 +31,11 @@
             overflow-x: hidden;
         }
         
-        /* ヘッダーのスリム化 */
         .top-nav { 
             background: white; 
             padding: 5px 10px; 
             box-shadow: 0 2px 10px rgba(255, 183, 197, 0.3); 
-            position: sticky; 
-            top: 0; 
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
         h1 { color: var(--accent-pink); font-size: 0.95rem; margin: 2px 0; }
         .date-display { 
@@ -49,7 +46,6 @@
             background: var(--sub-pink); border: none; border-radius: 50%; width: 22px; height: 22px; color: var(--accent-pink); font-weight: bold;
         }
 
-        /* パレット：塾4教科を復活 */
         .palette { 
             background: #fff; padding: 6px; display: flex; flex-wrap: wrap; 
             justify-content: center; gap: 5px; border-bottom: 2px dotted var(--main-pink); 
@@ -64,8 +60,7 @@
             color: var(--accent-pink); transform: translateY(1px); box-shadow: none;
         }
 
-        /* テーブル */
-        .scroll-container { overflow: auto; height: 55vh; background: white; -webkit-overflow-scrolling: touch; }
+        .scroll-container { overflow: auto; height: 52vh; background: white; -webkit-overflow-scrolling: touch; }
         table { border-collapse: collapse; min-width: 900px; width: 100%; table-layout: fixed; }
         thead th { 
             position: sticky; top: 0; z-index: 400; background-color: var(--main-pink); 
@@ -89,7 +84,6 @@
         .check-circle.done { background-color: var(--accent-pink); color: white; line-height: 14px; font-size: 9px; }
         .check-circle.done::after { content: '✓'; }
 
-        /* セルカラー */
         .cell-school { background-color: #e3f2fd; } 
         .cell-juku { background-color: #fff3e0; }
         .cell-dance { background-color: #f3e5f5; } 
@@ -98,7 +92,6 @@
         .cell-free { background-color: #f1f8e9; }
         .is-grayout { background-color: #eee !important; opacity: 0.4; pointer-events: none; }
 
-        /* メッセージ */
         #message {
             position: fixed; top: 15%; left: 50%; transform: translateX(-50%);
             background: var(--accent-pink); color: white; padding: 8px 16px; 
@@ -107,13 +100,32 @@
         }
 
         .stats-section { background: white; margin: 8px; padding: 8px; border-radius: 20px; border: 2px solid var(--main-pink); }
-        .tab-btn { padding: 4px 10px; border-radius: 12px; border: 1px solid var(--main-pink); background: white; color: var(--accent-pink); font-size: 10px; cursor: pointer; font-weight: bold;}
+        .tab-btn { padding: 4px 12px; border-radius: 12px; border: 1px solid var(--main-pink); background: white; color: var(--accent-pink); font-size: 11px; cursor: pointer; font-weight: bold;}
         .tab-btn.active { background: var(--main-pink); color: white; }
         
-        .year-report-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-        .month-card { background: #fffafb; border: 1px solid var(--sub-pink); border-radius: 10px; padding: 5px; }
-        .month-title { color: var(--accent-pink); font-size: 10px; font-weight: bold; }
-        .stat-row { font-size: 8px; margin-bottom: 1px; }
+        /* 今年の集計：2列にして見やすく修正 */
+        .year-report-container { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 8px; 
+            margin-top: 10px;
+        }
+        .month-card { 
+            background: #fffafb; 
+            border: 1.5px solid var(--sub-pink); 
+            border-radius: 15px; 
+            padding: 10px; 
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(255,183,197,0.2);
+        }
+        .month-title { color: var(--accent-pink); font-size: 13px; font-weight: bold; border-bottom: 1px dashed var(--main-pink); margin-bottom: 6px; text-align: center; }
+        .stat-row { 
+            font-size: 11px; 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 3px; 
+            color: #666;
+        }
 
         #mascot-container { position: fixed; bottom: 10px; right: 10px; z-index: 900; }
         #mascot { font-size: 50px; }
@@ -158,16 +170,16 @@
 
     <div class="stats-section">
         <div class="stats-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <select id="yearSelect" class="year-select" onchange="updateStats()" style="border:1px solid var(--main-pink); border-radius:8px; font-size:10px; color:var(--accent-pink);">
+            <select id="yearSelect" class="year-select" onchange="updateStats()" style="border:1.5px solid var(--main-pink); border-radius:10px; font-size:12px; color:var(--accent-pink); padding:3px;">
                 <option value="2025">2025年</option><option value="2026" selected>2026年</option><option value="2027">2027年</option>
             </select>
-            <div class="tab-menu" style="display:flex; gap:4px;">
+            <div class="tab-menu" style="display:flex; gap:6px;">
                 <button class="tab-btn active" onclick="changeTab('week', this)">今週</button>
-                <button class="tab-btn" onclick="yearReportMode()">今年</button>
+                <button class="tab-btn" onclick="yearReportMode()">今年(項目別)</button>
             </div>
         </div>
         <div id="statsContent"><div class="graph-area" id="graphArea"></div></div>
-        <div id="ai-comment" style="font-size:10px; margin-top:5px; font-weight:bold; color:var(--accent-pink);"></div>
+        <div id="ai-comment" style="font-size:11px; margin-top:8px; font-weight:bold; color:var(--accent-pink);"></div>
     </div>
 
     <div id="mascot-container"><span id="mascot">🧸</span></div>
@@ -179,9 +191,7 @@
 </div>
 
 <script>
-    // ★ あいことばの設定
     const SECRET_KEYWORD = "くまさん"; 
-
     const days = ["月", "火", "水", "木", "金", "土", "日"];
     let currentMonday = getMonday(new Date());
     let selectedTask = null;
@@ -319,8 +329,10 @@
             });
             aiComment.textContent = "今週もよくがんばってるね！🍓";
         } else {
+            // 集計対象に「ダンス」「自由」を追加
             let yearlyData = {};
-            for(let m=1; m<=12; m++) yearlyData[m] = { "学":0, "塾":0, "英":0, "読":0, "ダ":0 };
+            for(let m=1; m<=12; m++) yearlyData[m] = { "学":0, "塾":0, "英":0, "読":0, "ダ":0, "自":0 };
+            
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (!key.startsWith('week_')) continue;
@@ -335,19 +347,25 @@
                             else if(item.class.includes('eng')) yearlyData[m]["英"]++;
                             else if(item.class.includes('book')) yearlyData[m]["読"]++;
                             else if(item.class.includes('dance')) yearlyData[m]["ダ"]++;
+                            else if(item.class.includes('free')) yearlyData[m]["自"]++;
                         }
                     });
                 }
             }
             let html = '<div class="year-report-container">';
             for(let m=1; m<=12; m++) {
-                html += `<div class="month-card"><div class="month-title">${m}月</div>
-                    <div class="stat-row">🎒${yearlyData[m]["学"]/2}h</div><div class="stat-row">📖${yearlyData[m]["塾"]/2}h</div>
-                    <div class="stat-row">🔤${yearlyData[m]["英"]/2}h</div><div class="stat-row">📚${yearlyData[m]["読"]/2}h</div>
+                html += `<div class="month-card">
+                    <div class="month-title">${m}月</div>
+                    <div class="stat-row"><span>🎒 学校</span><span>${yearlyData[m]["学"]/2}h</span></div>
+                    <div class="stat-row"><span>📖 塾</span><span>${yearlyData[m]["塾"]/2}h</span></div>
+                    <div class="stat-row"><span>🔤 英語</span><span>${yearlyData[m]["英"]/2}h</span></div>
+                    <div class="stat-row"><span>📚 読書</span><span>${yearlyData[m]["読"]/2}h</span></div>
+                    <div class="stat-row"><span>💃 ダンス</span><span>${yearlyData[m]["ダ"]/2}h</span></div>
+                    <div class="stat-row"><span>✏️ 自由</span><span>${yearlyData[m]["自"]/2}h</span></div>
                 </div>`;
             }
             container.innerHTML = html + '</div>';
-            aiComment.textContent = selectedYear + "年のきろくだよ✨";
+            aiComment.textContent = selectedYear + "年の成長のきろくだよ✨";
         }
     }
 
