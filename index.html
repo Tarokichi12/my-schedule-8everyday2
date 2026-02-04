@@ -109,13 +109,7 @@
             gap: 8px; 
             margin-top: 10px;
         }
-        .month-card { 
-            background: #fffafb; 
-            border: 1.5px solid var(--sub-pink); 
-            border-radius: 15px; 
-            padding: 10px; 
-            text-align: left;
-        }
+        .month-card { background: #fffafb; border: 1.5px solid var(--sub-pink); border-radius: 15px; padding: 10px; text-align: left; }
         .month-title { color: var(--accent-pink); font-size: 13px; font-weight: bold; border-bottom: 1px dashed var(--main-pink); margin-bottom: 6px; text-align: center; }
         .stat-row { font-size: 11px; display: flex; justify-content: space-between; margin-bottom: 3px; color: #666; }
 
@@ -125,19 +119,9 @@
         .sync-box { background: var(--sub-pink); margin: 8px; padding: 6px; border-radius: 10px; font-size: 9px; color: var(--accent-pink); }
         .btn-sm { background: white; border: 1px solid var(--accent-pink); color: var(--accent-pink); border-radius: 8px; padding: 2px 6px; cursor: pointer; }
 
-        /* 消去ボタンのスタイル */
         .btn-clear-day {
-            margin-top: 2px;
-            padding: 2px 4px;
-            font-size: 8px;
-            background: #fff;
-            color: #ff85a1;
-            border: 1px solid #ff85a1;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+            margin-top: 2px; padding: 2px 4px; font-size: 8px; background: #fff; color: #ff85a1; border: 1px solid #ff85a1; border-radius: 5px; cursor: pointer; font-weight: bold;
         }
-        .btn-clear-day:active { background: #ffe4e8; }
     </style>
 </head>
 <body>
@@ -155,7 +139,7 @@
     </div>
 
     <div class="palette" id="palette">
-        <button class="palette-btn" data-task="school">🎒学校</button>
+        <button class="palette-btn" data-task="school">🎒学校の宿題</button>
         <button class="palette-btn" data-task="juku_国語" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(国)</button>
         <button class="palette-btn" data-task="juku_算数" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(算)</button>
         <button class="palette-btn" data-task="juku_理科" style="border-color:var(--juku-color); color:var(--juku-color);">📖塾(理)</button>
@@ -222,12 +206,9 @@
             if(isThisDay(i)) th.classList.add('today-highlight');
             th.innerHTML = `${day}<br>
                 <div style="background:white; color:black; font-size:8px; border-radius:5px; margin-top:3px; padding:2px; display:flex; flex-direction:column; gap:1px;">
-                    <label style="display:flex; align-items:center; gap:1px;"><input type="checkbox" class="school-check" ${i<5?'checked':''} onchange="updateView()">学校</label>
+                    <label style="display:flex; align-items:center; gap:1px;"><input type="checkbox" class="school-check" ${i<5?'checked':''} onchange="updateView()">🎒学校</label>
                     <select class="school-time" onchange="updateView()" style="font-size:8px; border:1px solid #ddd; border-radius:3px;">
-                        <option value="15:30">6時間</option>
-                        <option value="14:30">5時間</option>
-                        <option value="13:30">午前</option>
-                        <option value="12:30">給無</option>
+                        <option value="15:30">6時間</option><option value="14:30">5時間</option><option value="13:30">午前</option><option value="12:30">給無</option>
                     </select>
                     <label style="color:#d32f2f; display:flex; align-items:center; gap:1px; border-top:1px dashed #eee; padding-top:1px;"><input type="checkbox" class="busy-check" onchange="updateView()">1日予定あり💫</label>
                     <button class="btn-clear-day" onclick="clearDay(${i})">全部消す🧹</button>
@@ -249,21 +230,16 @@
         setTimeout(scrollToToday, 500);
     }
 
-    // 曜日ごとの予定を一括消去する関数
     function clearDay(dayIdx) {
         if (!confirm(days[dayIdx] + "曜日の予定を全部消してもいいかな？")) return;
-        
         const cells = document.querySelectorAll(`#tableBody td[data-day="${dayIdx}"]`);
         cells.forEach(td => {
             td.querySelector('.content').innerHTML = '';
-            // 今日のハイライトは残しつつ、タスク色だけ消す
             td.className = isThisDay(dayIdx) ? 'today-highlight' : '';
-            // 完了チェックも外す
             const check = td.querySelector('.check-circle');
             if (check) check.classList.remove('done');
         });
-        saveData();
-        updateStats();
+        saveData(); updateStats();
     }
 
     function isThisDay(dayIdx) {
@@ -304,7 +280,7 @@
             } else if (type === 'juku') {
                 label = "📖塾(" + sub + ")";
             } else {
-                const labels = {school:"🎒学校", eng:"🔤英語", book:"📚読書", dance:"💃ダンス"};
+                const labels = {school:"🎒学校の宿題", eng:"🔤英語", book:"📚読書", dance:"💃ダンス"};
                 label = labels[type];
             }
             td.className = (isThisDay(td.dataset.day)?'today-highlight ':'') + 'cell-' + type;
@@ -332,11 +308,11 @@
         if (currentTab === 'week') {
             container.innerHTML = '<div class="graph-area" id="graphArea" style="display:flex; align-items:flex-end; height:100px; border-bottom:1px solid var(--sub-pink); justify-content:space-around; margin-top:15px;"></div>';
             const area = document.getElementById('graphArea');
-            let stats = { "学校":0, "塾":0, "英語":0, "読書":0, "ダンス":0, "自由":0 };
+            let stats = { "宿題":0, "塾":0, "英語":0, "読書":0, "ダンス":0, "自由":0 };
             const data = JSON.parse(localStorage.getItem("week_" + currentMonday.toISOString().split('T')[0]) || "[]");
             data.forEach(item => {
                 if(item.done) {
-                    if(item.class.includes('school')) stats["学校"]++;
+                    if(item.class.includes('school')) stats["宿題"]++;
                     else if(item.class.includes('juku')) stats["塾"]++;
                     else if(item.class.includes('eng')) stats["英語"]++;
                     else if(item.class.includes('book')) stats["読書"]++;
@@ -354,8 +330,7 @@
             aiComment.textContent = "今週もよくがんばってるね！🍓";
         } else {
             let yearlyData = {};
-            for(let m=1; m<=12; m++) yearlyData[m] = { "学":0, "塾":0, "英":0, "読":0, "ダ":0, "自":0 };
-            
+            for(let m=1; m<=12; m++) yearlyData[m] = { "宿":0, "塾":0, "英":0, "読":0, "ダ":0, "自":0 };
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (!key.startsWith('week_')) continue;
@@ -365,7 +340,7 @@
                     data.forEach(item => {
                         if(item.done) {
                             let m = d.getMonth() + 1;
-                            if(item.class.includes('school')) yearlyData[m]["学"]++;
+                            if(item.class.includes('school')) yearlyData[m]["宿"]++;
                             else if(item.class.includes('juku')) yearlyData[m]["塾"]++;
                             else if(item.class.includes('eng')) yearlyData[m]["英"]++;
                             else if(item.class.includes('book')) yearlyData[m]["読"]++;
@@ -379,7 +354,7 @@
             for(let m=1; m<=12; m++) {
                 html += `<div class="month-card">
                     <div class="month-title">${m}月</div>
-                    <div class="stat-row"><span>🎒 学校</span><span>${yearlyData[m]["学"]/2}h</span></div>
+                    <div class="stat-row"><span>🎒 宿題</span><span>${yearlyData[m]["宿"]/2}h</span></div>
                     <div class="stat-row"><span>📖 塾</span><span>${yearlyData[m]["塾"]/2}h</span></div>
                     <div class="stat-row"><span>🔤 英語</span><span>${yearlyData[m]["英"]/2}h</span></div>
                     <div class="stat-row"><span>📚 読書</span><span>${yearlyData[m]["読"]/2}h</span></div>
